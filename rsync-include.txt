@@ -1,0 +1,38 @@
+# rsync include list.
+# note:
+#  -be careful with trailing spaces, '- * ' is different from '- *'
+#  -rsync stops at first matched rule and ignore the rest
+#  -rsync descends iteratively the folders-arborescence
+#  -'**' matches also zero, one or several '/'
+#  -get the list of all root files/folders
+#     pdsh -f 1 -w server[1-22] 'ls -la / | sed -e "s/  */ /g" | cut -d" " -f9-' | cut -d" " -f2- | sort -u
+#  -include all folders with '+ */' (missing this rule implies that '- *' will override all the inclusions of any subfolders)
+#  -exclude all non explicited files with '- *'
+#  -exclude everything except /etc/ssh: '+ /etc/ssh/** \ + */ \ - *'
+#  -exclude content of /tmp but include foldername: '- /tmp/* \ + */'
+#  -exclude content and also foldername /tmp: '- /tmp/ \ + */'
+#  -exclude content of each .ssh but include foldername: '- /**/.ssh/* \ + */'
+#
+# include everything except /tmp/:
+#- /tmp/
+# same but include /tmp/ as an empty folder:
+#- /tmp/*
+# include only /var/www/:
+#+ /var/
+#+ /var/www/
+#+ /var/www/**
+#- *
+# same but also include folder structure:
+#+ /var/www/**
+#+ */
+
+
+
+# pattern list includes home and etc directories: 
++ /home
++ /home/**
+
++ /etc
++ /etc/**
+
+- *
